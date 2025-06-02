@@ -1,5 +1,13 @@
 .latex {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     display: block;
-    margin: 3px;
+    margin: 5px;
     text-align: center;
+}
+
+.markdown {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: block;
+    text-align: center;
+    margin: 5px;
 }

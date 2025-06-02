@@ -49,10 +49,12 @@ void createNote(const string name) {
             latex = true;
             block.clear();
         } else if (line == "))" && latex) {
-            out << "<div class='latex'>\\[" << block << "\\]</div>\n";
+            out << block;
             latex = false;
-        } else if (md || latex) {
-            block += "\n" + line + "\n";
+        } else if (md) {
+            block += line + "\n";
+        } else {
+            block += "<div class='latex'>\\[" + line + "\\]</div>\n";
         }
     }
 
