@@ -5,15 +5,14 @@
 #include <cstdlib>
 
 using namespace std;
-using namespace std::filesystem;
 
 void create() {
     string noteName;
-    cout << "Enter name of new notebook: " << endl;
+    cout << "Enter name of new notebook: ";
     getline(cin, noteName);
 
     string path = "./" + noteName + ".txt";
-    ofstream file(noteName);
+    ofstream file(path);
     file.close();
 
     string cmd = "vim " + path;
@@ -23,7 +22,7 @@ void create() {
 
 int main() {
 
-
+    create();
 
     return 0;
 }
