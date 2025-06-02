@@ -1,15 +1,22 @@
-import { marked } from "marked";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import DOMPurify from "https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js";
 
-function renderMarkdown() {
+async function renderMarkdown() {
     const markdownBlocks = document.querySelectorAll(".markdown");
 
-    markdownBlocks.forEach(async (block) => {
-        const raw = block.textContent || "";
-        const html = await marked.parse(raw);
-        block.innerHTML = html;
-    });
+    for (const block of markdownBlocks) {
+        const raw = block.innerText || "";
+        const unsafeHtml = await marked.parse(raw);
+        block.innerHTML = DOMPurify.sanitize(unsafeHtml);
+    }
+
+    if (window.MathJax) {
+        window.MathJax.typesetPromise();
+    } else {
+        window.addEventListener("load", () => {
+            if (window.MathJax) window.MathJax.typesetPromise();
+        });
+    }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    renderMarkdown();
-});
+window.addEventListener("DOMContentLoaded", renderMarkdown);

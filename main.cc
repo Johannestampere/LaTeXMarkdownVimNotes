@@ -5,6 +5,21 @@
 
 using namespace std;
 
+string htmlEscape(const string& data) {
+    string result;
+    for (char c : data) {
+        switch (c) {
+            case '&':  result += "&amp;";  break;
+            case '\"': result += "&quot;"; break;
+            case '\'': result += "&apos;"; break;
+            case '<':  result += "&lt;";   break;
+            case '>':  result += "&gt;";   break;
+            default:   result += c;        break;
+        }
+    }
+    return result;
+}
+
 void createNote(const string name) {
     ifstream in("./" + name + ".txt");
     ofstream out("notebook.html");
@@ -27,7 +42,7 @@ void createNote(const string name) {
             md = true;
             block.clear();
         } else if (line == ">>" && md) {
-            out << "<div class='markdown'>" << block << "</div>\n";
+            out << "<div class='markdown'>" << htmlEscape(block) << "</div>\n";
             md = false;
         } else if (line == "((") {
             latex = true;
