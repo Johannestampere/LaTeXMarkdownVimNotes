@@ -1,0 +1,13 @@
+body {
+    font-family: sans-serif;
+    margin: auto;
+    padding: 5px;
+}
+
+.markdown {
+    margin-bottom: 5px;
+}
+
+.latex {
+    margin: 5px;
+}
