@@ -22,7 +22,7 @@ string htmlEscape(const string& data) {
 
 void createNote(const string name) {
     ifstream in("./" + name + ".txt");
-    ofstream out("notebook.html");
+    ofstream out(name + ".html");
 
     out << "<!DOCTYPE html>\n";
     out << "<html>\n";
@@ -32,6 +32,7 @@ void createNote(const string name) {
     out << "    <link rel=\"stylesheet\" href=\"style.css\" />\n";
     out << "</head>\n";
     out << "<body>\n";
+    out << "    <script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n";
     out << "    <div id=\"content\">\n";
 
     string line, block;
@@ -42,7 +43,7 @@ void createNote(const string name) {
             md = true;
             block.clear();
         } else if (line == ">>" && md) {
-            out << "<div class='markdown'>" << htmlEscape(block) << "</div>\n";
+            out << "<div class='markdown'>" << block << "</div>\n";
             md = false;
         } else if (line == "((") {
             latex = true;
@@ -51,13 +52,18 @@ void createNote(const string name) {
             out << "<div class='latex'>\\[" << block << "\\]</div>\n";
             latex = false;
         } else if (md || latex) {
-            block += line + "\n";
+            block += "\n" + line + "\n";
         }
     }
 
     out << "    </div>\n";
-    out << "    <script type=\"module\" src=\"render.js\"></script>\n";
     out << "    <script id=\"MathJax-script\" async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>\n";
+    out << "    <script>\n";
+    out << "      document.querySelectorAll('.markdown').forEach(block => {\n";
+    out << "        block.innerHTML = marked.parse(block.textContent.trim());\n";
+    out << "      });\n";
+    out << "    </script>\n";
+
 
     out << "</body>\n";
     out << "</html>\n";
@@ -66,7 +72,7 @@ void createNote(const string name) {
     out.close();
 
     #ifdef __APPLE__
-        system("open notebook.html");
+        system(("open " + name + ".html").c_str());
     #elif _WIN32
         system("start notebook.html");
     #else
