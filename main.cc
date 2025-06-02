@@ -5,21 +5,6 @@
 
 using namespace std;
 
-string htmlEscape(const string& data) {
-    string result;
-    for (char c : data) {
-        switch (c) {
-            case '&':  result += "&amp;";  break;
-            case '\"': result += "&quot;"; break;
-            case '\'': result += "&apos;"; break;
-            case '<':  result += "&lt;";   break;
-            case '>':  result += "&gt;";   break;
-            default:   result += c;        break;
-        }
-    }
-    return result;
-}
-
 void createNote(const string name) {
     ifstream in("./" + name + ".txt");
     ofstream out(name + ".html");
