@@ -1,1 +1,1 @@
-# LaTeX_Markdown_Notes
+# Easily usable Vim-based notebook that supports LaTeX and Markdown
