@@ -1,63 +1,38 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <filesystem>
 #include <cstdlib>
 
 using namespace std;
 
-void create() {
-    string noteName;
-    cout << "Enter name of new notebook: ";
-    getline(cin, noteName);
+void createNote(const string name) {
+    ifstream in("./" + name + ".txt");
+    ofstream out("notebook.html");
 
-    string path = "./" + noteName + ".txt";
-    ofstream file(path);
-    file.close();
-
-    string cmd = "vim " + path;
-
-    system(cmd.c_str());
-}
-
-void renderNote(const string name) {
-    ifstream in{"./" + name + ".txt"};
-    // stores HTML code to render notebook
-    ofstream out("note.html");
-
-    // write into the html file
-    out << R"(
-        <html>
-            <head>
-                <meta charset="UTF-8">
-                <title>Notebook</title>
-                <link rel="stylesheet" href="style.css" />
-            </head>
-            <body>
-                <div id="content">
-                    content
-                </div>
-
-                <script type="module" src="render.ts"></script>
-            </body>
-        </html>
-    )";
+    out << "<!DOCTYPE html>\n";
+    out << "<html>\n";
+    out << "<head>\n";
+    out << "    <meta charset=\"UTF-8\">\n";
+    out << "    <title>Notebook</title>\n";
+    out << "    <link rel=\"stylesheet\" href=\"style.css\" />\n";
+    out << "</head>\n";
+    out << "<body>\n";
+    out << "    <div id=\"content\">\n";
 
     string line, block;
-
     bool md = false, latex = false;
 
     while (getline(in, line)) {
         if (line == "<<") {
             md = true;
             block.clear();
-        } else if (line == ">>" && md = true) {
+        } else if (line == ">>" && md) {
             out << "<div class='markdown'>" << block << "</div>\n";
             md = false;
         } else if (line == "((") {
             latex = true;
             block.clear();
-        } else if (line == "))" && latex == true) {
+        } else if (line == "))" && latex) {
             out << "<div class='latex'>\\[" << block << "\\]</div>\n";
             latex = false;
         } else if (md || latex) {
@@ -65,10 +40,38 @@ void renderNote(const string name) {
         }
     }
 
+    out << "    </div>\n";
+    out << "    <script type=\"module\" src=\"render.js\"></script>\n";
+    out << "    <script id=\"MathJax-script\" async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>\n";
+
+    out << "</body>\n";
+    out << "</html>\n";
+
+    in.close();
+    out.close();
+
+    #ifdef __APPLE__
+        system("open notebook.html");
+    #elif _WIN32
+        system("start notebook.html");
+    #else
+        system("xdg-open notebook.html");
+    #endif
 }
 
 int main() {
+    string noteName;
+    cout << "Notebook name: ";
+    getline(cin, noteName);
+
+    string path = "./" + noteName + ".txt";
+    ofstream file{path};
+    file.close();
+
+    string cmd = "vim " + path;
+    system(cmd.c_str());
+
+    createNote(noteName);
 
     return 0;
 }
-
