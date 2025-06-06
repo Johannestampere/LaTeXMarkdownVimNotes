@@ -1,6 +1,4 @@
 body {
-    margin: 0;
-    padding: 0;
     background-color: black;
     color: aliceblue;
     display: flex;
@@ -8,6 +6,8 @@ body {
     align-items: center;
     justify-content: center;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0px;
+    padding: 0px;
 }
 
 #content {
@@ -17,28 +17,26 @@ body {
 }
 
 .latex {
-    display: block;
     margin: 10px 0;
-    text-align: center;
+    text-align: left;
+    border-radius: 6px;
 }
 
 .markdown {
     margin: 10px 0;
     text-align: left;
-    background-color: #111;
-    color:cornsilk;
-    padding: 15px;
+    color: cornsilk;
     border-radius: 6px;
 }
 
 .codeblock {
-    background-color: #111;
+    background-color: rgb(17, 17, 17);
     color: cadetblue;
-    font-family: 'Courier New', monospace;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 6px;
+    font-family: "Courier New", monospace;
     width: 100%;
+    padding: 15px;
+    margin: 10px 0px;
+    border-radius: 6px;
 }
 
 .code {
