@@ -32,10 +32,12 @@ void createNote(const string name) {
             out << "<div class='markdown'>" << block << "</div>\n";
             md = false;
         } else if (line == "{{" && !md && !latex) {
+            out << "<div class='codeblock'>\n";
             code = true;
             block.clear();
         } else if (line == "}}" && code) {
             out << block;
+            out << "</div>";
             code = false;
         } else if (line == "((" && !md && !code) {
             latex = true;
