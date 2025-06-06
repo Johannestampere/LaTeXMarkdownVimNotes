@@ -19,18 +19,25 @@ void createNote(const string name) {
     out << "<body>\n";
     out << "    <script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n";
     out << "    <div id=\"content\">\n";
+    out << "        <h1>" << name << "</h1>\n";
 
     string line, block;
-    bool md = false, latex = false;
+    bool md = false, latex = false, code = false;
 
     while (getline(in, line)) {
         if (line == "<<") {
             md = true;
             block.clear();
-        } else if (line == ">>" && md) {
+        } else if (line == ">>" && md && !code && !latex) {
             out << "<div class='markdown'>" << block << "</div>\n";
             md = false;
-        } else if (line == "((") {
+        } else if (line == "{{" && !md && !latex) {
+            code = true;
+            block.clear();
+        } else if (line == "}}" && code) {
+            out << block;
+            code = false;
+        } else if (line == "((" && !md && !code) {
             latex = true;
             block.clear();
         } else if (line == "))" && latex) {
@@ -38,6 +45,8 @@ void createNote(const string name) {
             latex = false;
         } else if (md) {
             block += line + "\n";
+        } else if (code) {
+            block += "<div class='code'>" + line + "</div>\n";
         } else {
             block += "<div class='latex'>\\[" + line + "\\]</div>\n";
         }
