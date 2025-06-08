@@ -32,18 +32,18 @@ void createNote(const string name) {
         } else if (line == ">>" && md && !code && !latex) {
             out << "<div class='markdown'>" << block << "</div>\n";
             md = false;
-        } else if (line == "{{" && !md && !latex) {
+        } else if (line == "((" && !md && !latex) {
             out << "<div class='codeblock'>\n";
             code = true;
             block.clear();
-        } else if (line == "}}" && code) {
+        } else if (line == "))" && code) {
             out << block;
             out << "</div>";
             code = false;
-        } else if (line == "((" && !md && !code) {
+        } else if (line == "{{" && !md && !code) {
             latex = true;
             block.clear();
-        } else if (line == "))" && latex) {
+        } else if (line == "}}" && latex) {
             out << block;
             latex = false;
         } else if (md) {
@@ -79,7 +79,6 @@ void createNote(const string name) {
     #endif
 }
 
-
 // should be either "exe create name" or "exe open name" or "exe delete name"
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -96,13 +95,15 @@ int main(int argc, char* argv[]) {
         file.close();
         string cmd = "vim " + txtpath;
         system(cmd.c_str());
-        createNote(noteName);
+        createNote(txtpath);
     } else if (command == "open") {
         if (!filesystem::exists(txtpath)) {
             cerr << "That notebook doesn't exist!" << endl;
             return 1;
-        } else {
-            
         }
+        createNote(txtpath);
+    } else {
+        cerr << "Wrong command used!" << endl;
+        return 1;
     }
 }
