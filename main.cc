@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <filesystem>
 
 using namespace std;
 
@@ -78,19 +79,30 @@ void createNote(const string name) {
     #endif
 }
 
-int main() {
-    string noteName;
-    cout << "Notebook name: ";
-    getline(cin, noteName);
 
-    string path = "./" + noteName + ".txt";
-    ofstream file{path};
-    file.close();
+// should be either "exe create name" or "exe open name" or "exe delete name"
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
+        cout << "Usage:\n" << "./exe create <name>\n" << "./exe open <name>\n" << "./exe delete <name>" << endl;
+    }
 
-    string cmd = "vim " + path;
-    system(cmd.c_str());
+    string noteName = argv[2];
+    string command = argv[1];
+    string txtpath = "./" + noteName + ".txt";
+    string htmlpath = "./" + noteName + ".html";
 
-    createNote(noteName);
-
-    return 0;
+    if (command == "create") {
+        ofstream file{txtpath};
+        file.close();
+        string cmd = "vim " + txtpath;
+        system(cmd.c_str());
+        createNote(noteName);
+    } else if (command == "open") {
+        if (!filesystem::exists(txtpath)) {
+            cerr << "That notebook doesn't exist!" << endl;
+            return 1;
+        } else {
+            
+        }
+    }
 }
