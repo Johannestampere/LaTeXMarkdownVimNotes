@@ -1,1 +1,1 @@
-# Easy-to-use Vim-based notebook with code blocks, Markdown, and LaTeX
+# Lightweight Vim-based notebook with code blocks, Markdown, and LaTeX
